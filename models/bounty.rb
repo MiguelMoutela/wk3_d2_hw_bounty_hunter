@@ -2,7 +2,7 @@ require ('pg')
 
 class Bounty
 
-  attr_accessor(:name, :species, :bounty_value, :last_know_location)
+  attr_accessor(:name, :species, :bounty_value, :last_known_location)
   attr_reader :id
 
   def initialize(options)
@@ -10,7 +10,7 @@ class Bounty
     @name = options['name']
     @species = options['species']
     @bounty_value = options['bounty_value'].to_i
-    @last_know_location = options['last_know_location']
+    @last_know_location = options['last_known_location']
 
   end
 
@@ -25,7 +25,7 @@ class Bounty
         name,
         species,
         bounty,
-        last_know_location
+        last_known_location
       )
       VALUES
       (
@@ -37,7 +37,7 @@ class Bounty
       @name,
       @species,
       @bounty,
-      @last_know_location
+      @last_known_location
     ]
     db.prepare("save", sql)
     @id = db.exec_prepared("save", values)[0]['id'].to_i()
@@ -93,31 +93,32 @@ class Bounty
         name,
         species,
         bounty,
-        last_know_location
+        last_known_location
       ) =
       (
         $1, $2, $3, $4
       ) WHERE id = $5
     "
-    values = [@name, @species, @bounty, @last_know_location, @id]
+    values = [@name, @species, @bounty, @last_known_location, @id]
     db.prepare("update", sql)
     db.exec_prepared("update", values)
     db.close()
   end
 
-  def find
+  def find(id)
     db = PG.connect({
       dbname: 'bounties',
       host: 'localhost'
       })
-    sql = "SELECT * FROM bounties"
-    values = []
+    sql = "SELECT * FROM bounties WHERE id = $1"
+    value = [@id]
     db.prepare("all", sql)
     bounties = db.exec_prepared("all", values)
     db.close()
     bounties_as_objects = bounties.map {|bounty| Bounty.new(bounty)}
-    return bounties_as_objects
-
+      if bounty[:id] = id
+      end
+    return bounty
   end
 
 end

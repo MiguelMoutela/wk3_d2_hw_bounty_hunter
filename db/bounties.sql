@@ -5,5 +5,5 @@ CREATE TABLE bounties (
   name VARCHAR(255),
   species VARCHAR(255),
   bounty_value INT2,
-  last_know_location VARCHAR(255)
+  last_known_location VARCHAR(255)
 );
