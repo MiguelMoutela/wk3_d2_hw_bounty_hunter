@@ -52,10 +52,10 @@ class Bounty
     sql = "SELECT * FROM bounties"
     values = []
     db.prepare("all", sql)
-    orders = db.exec_prepared("all", values)
+    bounties = db.exec_prepared("all", values)
     db.close()
-    orders_as_objects = orders.map {|order| Bounty.new(order)}
-    return orders_as_objects
+    bounties_as_objects = bounties.map {|bounty| Bounty.new(bounty)}
+    return bounties_as_objects
   end
 
   def self.delete_all()
@@ -103,6 +103,21 @@ class Bounty
     db.prepare("update", sql)
     db.exec_prepared("update", values)
     db.close()
+  end
+
+  def find
+    db = PG.connect({
+      dbname: 'bounties',
+      host: 'localhost'
+      })
+    sql = "SELECT * FROM bounties"
+    values = []
+    db.prepare("all", sql)
+    bounties = db.exec_prepared("all", values)
+    db.close()
+    bounties_as_objects = bounties.map {|bounty| Bounty.new(bounty)}
+    return bounties_as_objects
+
   end
 
 end
