@@ -1,8 +1,8 @@
 require('pry')
 
-require_relative('models/bounties.rb')
+require_relative('models/bounty.rb')
 
-PizzaOrder.delete_all()
+Bounty.delete_all()
 
 bounty_1 = Bounty.new(
   {

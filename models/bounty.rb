@@ -1,4 +1,4 @@
-require ('pg')
+require ('PG')
 
 class Bounty
 
@@ -19,7 +19,7 @@ class Bounty
       dbname: 'bounties',
       host: 'localhost'
       })
-    sql = "
+    sql_insert = "
       INSERT INTO bounties
       (
         name,
@@ -31,16 +31,22 @@ class Bounty
       (
         $1, $2, $3, $4
       )
-      RETURNING *
-    "
+      RETURNING id"
     values = [
       @name,
       @species,
       @bounty,
       @last_known_location
     ]
-    db.prepare("save", sql)
-    @id = db.exec_prepared("save", values)[0]['id'].to_i()
+
+    db.prepare("save", sql_insert) #it runs a save method with the statement I gave it
+
+    array_of_hashes = db.exec_prepared("save", values) # db_exec executes the sql statement and gets back the id because whe are asking returning id or returning * all.
+
+    first_item_hash = array_of_hashes[0]
+
+    @id = first_item_hash["id"].to_i()
+
     db.close()
   end
 
